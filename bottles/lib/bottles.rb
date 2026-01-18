@@ -15,7 +15,7 @@ class Bottles
     if number == 0
       "Go to the store and buy some more"
     else
-      "Take #{container_reference(number)} down and pass it around"
+      "Take #{pronoun(number)} down and pass it around"
     end
   end
 
@@ -27,12 +27,16 @@ class Bottles
     end
   end
 
-  def no_of_containers(number)
+  def quantity(number)
     if number == 0
-      "no more #{container(number)}"
+      "no more"
     else
-      "#{number} #{container(number)}"
+      "#{number}"
     end
+  end
+
+  def no_of_containers(number)
+    "#{quantity(number)} #{container(number)}"
   end
 
   def container(number)
@@ -43,7 +47,7 @@ class Bottles
     end
   end
 
-  def container_reference(number)
+  def pronoun(number)
     if number == 1
       "it"
     else
