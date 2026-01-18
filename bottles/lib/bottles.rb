@@ -7,7 +7,7 @@ class Bottles
     upper.downto(lower).map { |i| verse(i) }.join("\n")
   end
 
-  def container(number)
+  def container(number, name="bottles of beer")
     case number
     when 0
       "no more bottles of beer"
