@@ -10,23 +10,26 @@ DATA = [
   "the cat that killed",
   "the rat that ate",
   "the malt that lay in",
-  ""
+  "the house that Jack built"
 ]
 
 class House
-  attr_reader :prefix, :phrases, :suffix
+  attr_reader :prefix, :phrases
   def initialize(phrases: DATA, orderer: StandardOrderer.new, prefixer: StandardPhrasePrefixer.new)
     @phrases = orderer.order(phrases)
     @prefix = prefixer.prefix
-    @suffix = "the house that Jack built."
   end
 
   def recite
     (1..12).to_a.map { |n| line(n) }.join("\n")
   end
 
+  def phrase(number)
+    phrases.last(number).join(" ")
+  end
+
   def line(number)
-    prefix + " " + phrases.last(number).join(" ") + suffix + "\n"
+    "#{prefix} #{phrase(number)}.\n"
   end
 end
 
@@ -53,3 +56,11 @@ class RandomOrderer
     data.shuffle
   end
 end
+
+class RandomButLastOrderer
+  def order(data)
+    data[..-2].shuffle.append(data.last)
+  end
+end
+
+puts House.new(orderer: RandomButLastOrderer.new).recite
