@@ -4,36 +4,37 @@ class House
   end
 
   def line(number)
-    HouseLine.new(number).line
+    HouseLine.for(number).line
   end
 end
 
 class HouseLine
-  attr_reader :number
-  def initialize(number)
-    @number = number
-  end
-
-  def line
+  def self.for(number)
     case number
     when 1
-      HouseLine1.new(number).line
-    when 2..12
-      RepeatingHouseLine.new(number).line
+      HouseLine1.new(number)
     else
-      ""
+      RepeatingHouseLine.new(number)
     end
   end
 end
 
 class HouseLine1
-  attr_reader :number
-  def initialize(number)
+  attr_reader :number, :bit_name_generator
+  def initialize(number, bit_name_generator: BitName)
     @number = number
+    @bit_name_generator = bit_name_generator
   end
 
   def line
-    "This is the house that Jack built.\n"
+    "This is " + 
+      bit_name + 
+      "the house that Jack built.\n"
+  end
+
+  private
+  def bit_name
+    bit_name_generator.for(number)
   end
 end
 
@@ -47,8 +48,9 @@ class RepeatingHouseLine
 
   def line
     "This is " + 
-    repeating_bit_name +
-    " that lay in the house" + " that Jack built." + "\n"
+      repeating_bit_name +
+      " that lay in " + 
+      "the house that Jack built." + "\n"
   end
 
   private
