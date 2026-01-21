@@ -14,10 +14,11 @@ DATA = [
 ]
 
 class House
-  attr_reader :prefix
-  def initialize(data: DATA, orderer: StandardOrderer.new, prefixer: StandardPhrasePrefixer.new)
-    @data = orderer.order(data)
+  attr_reader :prefix, :phrases, :suffix
+  def initialize(phrases: DATA, orderer: StandardOrderer.new, prefixer: StandardPhrasePrefixer.new)
+    @phrases = orderer.order(phrases)
     @prefix = prefixer.prefix
+    @suffix = "the house that Jack built."
   end
 
   def recite
@@ -25,11 +26,7 @@ class House
   end
 
   def line(number)
-    prefix + " " + phrases.last(number).join(" ") + "the house that Jack built.\n"
-  end
-
-  def phrases
-    @data
+    prefix + " " + phrases.last(number).join(" ") + suffix + "\n"
   end
 end
 
