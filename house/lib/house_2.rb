@@ -28,60 +28,63 @@ class HouseLine
 end
 
 class RepeatingHouseLine
-  attr_reader :number
+  attr_reader :number, :bit_name
   def initialize(number)
     @number = number
+    @bit_name = BitFactory.for(number)
   end
 
   def line
     "This is " + 
-    RepeatingHouseLineBit.new(number).bit +
+    RepeatingHouseLineBit.new(number, bit_name: bit_name).bit +
     " that lay in the house" + " that Jack built." + "\n"
   end
 end
 
-class BitName
+class BitFactory
   def self.for(number)
     case number
     when 2
       "the malt"
     when 3
-      "the rat that ate"
+      "the rat that ate "
     when 4
-      "the cat that killed"
+      "the cat that killed "
     when 5
-      "the dog that worried"
+      "the dog that worried "
     when 6
-      "the cow with the crumpled horn that tossed"
+      "the cow with the crumpled horn that tossed "
     when 7
-      "the maiden all forlorn that milked"
+      "the maiden all forlorn that milked "
     when 8
-      "the man all tattered and torn that kissed"
+      "the man all tattered and torn that kissed "
     when 9
-      "the priest all shaven and shorn that married"
+      "the priest all shaven and shorn that married "
     when 10
-      "the rooster that crowed in the morn that woke"
+      "the rooster that crowed in the morn that woke "
     when 11
-      "the farmer sowing his corn that kept"
+      "the farmer sowing his corn that kept "
     when 12
-      "the horse and the hound and the horn that belonged to"
-    else
-      ""
+      "the horse and the hound and the horn that belonged to "
     end
   end
 end
 
 class RepeatingHouseLineBit
   attr_reader :number, :bit_name
-  def initialize(number, bit_name_generator: BitName)
+  def initialize(number, bit_name: "")
     @number = number
-    @bit_name = bit_name_generator.for(number)
+    @bit_name = bit_name
   end
 
   def bit
-    bit_name + 
-      (number > 2 ? " " : "") + 
-      (number > 1 ? RepeatingHouseLineBit.new(number - 1).bit : "")
+    bit_name
+    case number
+    when 2
+      bit_name
+    when 3..12
+      bit_name + RepeatingHouseLineBit.new(number, bit_name: bit_name).bit
+    end
   end
 end
 
