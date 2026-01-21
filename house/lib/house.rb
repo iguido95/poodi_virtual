@@ -1,5 +1,4 @@
 class House
-
   def recite
     (1..12).to_a.map { |n| line(n) }.join("\n")
   end
@@ -27,16 +26,34 @@ class HouseLine
   end
 end
 
-class RepeatingHouseLine
+class HouseLine1
   attr_reader :number
   def initialize(number)
     @number = number
   end
 
   def line
+    "This is the house that Jack built.\n"
+  end
+end
+
+class RepeatingHouseLine
+  attr_reader :number, :bit_name_generator
+  def initialize(number, bit_name_generator: BitName)
+    raise ArgumentError "number should be 2 or higher" if number < 2
+    @number = number
+    @bit_name_generator = bit_name_generator
+  end
+
+  def line
     "This is " + 
-    RepeatingHouseLineBit.new(number).bit +
+    repeating_bit_name +
     " that lay in the house" + " that Jack built." + "\n"
+  end
+
+  private
+  def repeating_bit_name
+    number.downto(2).to_a.map{ |n| bit_name_generator.for(n) }.join(" ")
   end
 end
 
@@ -68,30 +85,5 @@ class BitName
     else
       ""
     end
-  end
-end
-
-class RepeatingHouseLineBit
-  attr_reader :number, :bit_name
-  def initialize(number, bit_name_generator: BitName)
-    @number = number
-    @bit_name = bit_name_generator.for(number)
-  end
-
-  def bit
-    bit_name + 
-      (number > 2 ? " " : "") + 
-      (number > 1 ? RepeatingHouseLineBit.new(number - 1).bit : "")
-  end
-end
-
-class HouseLine1
-  attr_reader :number
-  def initialize(number)
-    @number = number
-  end
-
-  def line
-    "This is the house that Jack built.\n"
   end
 end

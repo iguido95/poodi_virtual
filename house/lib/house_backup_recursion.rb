@@ -1,3 +1,6 @@
+### ATTENTION: BACKUP ###
+
+
 class House
 
   def recite
@@ -27,33 +30,16 @@ class HouseLine
   end
 end
 
-class HouseLine1
+class RepeatingHouseLine
   attr_reader :number
   def initialize(number)
     @number = number
   end
 
   def line
-    "This is the house that Jack built.\n"
-  end
-end
-
-class RepeatingHouseLine
-  attr_reader :number, :bit_name_generator
-  def initialize(number, bit_name_generator: BitName)
-    @number = number
-    @bit_name_generator = bit_name_generator
-  end
-
-  def line
     "This is " + 
-    repeating_bit_name +
+    RepeatingHouseLineBit.new(number).bit +
     " that lay in the house" + " that Jack built." + "\n"
-  end
-
-  private
-  def repeating_bit_name
-    number.downto(2).to_a.map{ |n| bit_name_generator.for(n) }.join(" ")
   end
 end
 
@@ -87,3 +73,29 @@ class BitName
     end
   end
 end
+
+class RepeatingHouseLineBit
+  attr_reader :number, :bit_name
+  def initialize(number, bit_name_generator: BitName)
+    @number = number
+    @bit_name = bit_name_generator.for(number)
+  end
+
+  def bit
+    bit_name + 
+      (number > 2 ? " " : "") + 
+      (number > 1 ? RepeatingHouseLineBit.new(number - 1).bit : "")
+  end
+end
+
+class HouseLine1
+  attr_reader :number
+  def initialize(number)
+    @number = number
+  end
+
+  def line
+    "This is the house that Jack built.\n"
+  end
+end
+
